@@ -1,0 +1,61 @@
+version: '3.8'
+
+services:
+  # Banco de dados MySQL
+  db:
+    image: mysql:8.0
+    container_name: realflux_db
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+    volumes:
+      - mysql_data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    networks:
+      - realflux_net
+
+  # Aplicação Ruby (Backend)
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: realflux_backend
+    restart: unless-stopped
+    env_file: .env
+    depends_on:
+      - db
+    volumes:
+      - ./backend:/app
+    ports:
+      - "3000:3000"
+    networks:
+      - realflux_net
+
+  # Aplicação Next.js (Frontend)
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: realflux_frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    ports:
+      - "4000:3000"
+    networks:
+      - realflux_net
+
+volumes:
+  mysql_data:
+
+networks:
+  realflux_net:
+    driver: bridge
