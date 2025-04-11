@@ -7,8 +7,10 @@ O Real-Flux é uma aplicação web para gerenciamento de transações financeira
 ## Tecnologias Utilizadas
 
 - **Frontend**: Next.js (React)
-- **Backend**: Ruby on Rails/Sinatra *(escolha o framework Ruby que está usando)*
+- **Backend**: Node.js com Express
 - **Banco de Dados**: MySQL
+- **ORM**: Sequelize
+- **Autenticação**: JWT (JSON Web Tokens)
 - **Infraestrutura**: Docker
 
 ## Estrutura do Projeto
@@ -26,11 +28,15 @@ real-flux/
 │ │ ├── transactions/ # Gestão de transações
 │ │ └── settings/ # Configurações
 │ └── ...
-├── backend/ # Aplicação Ruby
-│ ├── app/
-│ ├── config/
-│ ├── db/
-│ └── ...
+├── backend/ # API Node.js
+│ ├── src/
+│ │ ├── config/ # Configurações
+│ │ ├── middleware/ # Middlewares (auth)
+│ │ ├── models/ # Modelos Sequelize
+│ │ ├── routes/ # Rotas da API
+│ │ └── server.js # Arquivo principal
+│ ├── package.json
+│ └── Dockerfile
 └── README.md
 
 
@@ -60,7 +66,7 @@ real-flux/
 
 - Docker e Docker Compose instalados
 - Node.js (opcional, apenas para desenvolvimento fora do container)
-- Ruby (opcional, apenas para desenvolvimento fora do container)
+- Node.js v18+ (opcional, apenas para desenvolvimento fora do container)
 
 ## Como Executar o Projeto
 
@@ -107,11 +113,11 @@ Para desenvolver fora do container:
     yarn dev
 ```
 
-Backend (Ruby)
+Backend (Node.js)
 Para desenvolver fora do container:
 ```bash
     cd backend
-    bundle install
-    rails server
+    npm install
+    npm run dev
 ```
 
