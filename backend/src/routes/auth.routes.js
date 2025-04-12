@@ -32,7 +32,7 @@ router.post('/signup', async (req, res) => {
     const user = await User.create(userData);
     console.log('User created successfully:', { id: user.id, name: user.name, email: user.email });
 
-    res.send({ 
+    res.status(201).send({ 
       message: "User registered successfully!",
       user: {
         id: user.id,
