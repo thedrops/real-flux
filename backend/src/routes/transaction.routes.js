@@ -24,15 +24,75 @@ router.post('/', verifyToken, async (req, res) => {
     }
 });
 
-// Get all transactions
+// Get all transactions with pagination
 router.get('/', verifyToken, async (req, res) => {
     try {
-        const transactions = await Transaction.findAll({
-            where: {
-                user_id: req.userId
-            }
+        const { page = 1, limit = 10 } = req.query;
+        const offset = (page - 1) * limit;
+
+        const [transactions, total] = await Promise.all([
+            Transaction.findAndCountAll({
+                where: {
+                    user_id: req.userId
+                },
+                limit: parseInt(limit),
+                offset: parseInt(offset),
+                order: [['transaction_date', 'DESC']]
+            }),
+            Transaction.count({
+                where: {
+                    user_id: req.userId
+                }
+            })
+        ]);
+
+        const totalPages = Math.ceil(total / limit);
+        
+        res.status(200).json({
+            transactions: transactions.rows,
+            page: parseInt(page),
+            limit: parseInt(limit),
+            totalPages,
+            totalItems: total
         });
-        res.status(200).json(transactions);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+// Get transaction summary
+router.get('/summary', verifyToken, async (req, res) => {
+    try {
+        console.log('Summary request received for user:', req.userId);
+        
+        const [totalIncome, totalExpenses] = await Promise.all([
+            Transaction.sum('amount', {
+                where: {
+                    user_id: req.userId,
+                    transaction_type: 'income'
+                }
+            }),
+            Transaction.sum('amount', {
+                where: {
+                    user_id: req.userId,
+                    transaction_type: 'expense'
+                }
+            })
+        ]);
+
+        console.log('Summary calculations:', {
+            totalIncome,
+            totalExpenses,
+            totalBalance: (totalIncome || 0) - (totalExpenses || 0)
+        });
+
+        const totalBalance = (totalIncome || 0) - (totalExpenses || 0);
+
+        res.status(200).json({
+            total_balance: totalBalance,
+            total_income: totalIncome || 0,
+            total_expenses: totalExpenses || 0
+        });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }

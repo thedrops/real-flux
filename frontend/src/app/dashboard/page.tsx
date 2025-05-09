@@ -1,108 +1,118 @@
 'use client';
-
 import { useSession } from 'next-auth/react';
 import { 
   BanknotesIcon, 
   ArrowTrendingUpIcon, 
   ArrowTrendingDownIcon,
-  ChartBarIcon
 } from '@heroicons/react/24/outline';
+import { redirect } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
-const stats = [
-  { 
-    name: 'Saldo Total', 
-    value: 'R$ 24.500,00', 
-    change: '+4.75%',
-    changeType: 'positive',
-    icon: BanknotesIcon 
-  },
-  { 
-    name: 'Receitas', 
-    value: 'R$ 12.300,00', 
-    change: '+12.3%',
-    changeType: 'positive',
-    icon: ArrowTrendingUpIcon 
-  },
-  { 
-    name: 'Despesas', 
-    value: 'R$ 7.800,00', 
-    change: '-2.4%',
-    changeType: 'negative',
-    icon: ArrowTrendingDownIcon 
-  },
-  { 
-    name: 'Investimentos', 
-    value: 'R$ 4.400,00', 
-    change: '+8.1%',
-    changeType: 'positive',
-    icon: ChartBarIcon 
-  },
-];
+// Type for transactions
+export interface Stat {
+  name: string;
+  value: string;
+  change: string;
+  changeType: 'positive' | 'negative';
+  icon: string;
+}
 
-const recentTransactions = [
-  {
-    id: 1,
-    name: 'Salário',
-    amount: 'R$ 5.000,00',
-    type: 'credit',
-    category: 'Receita',
-    date: '12 Abr, 2025',
-  },
-  {
-    id: 2,
-    name: 'Aluguel',
-    amount: 'R$ 1.200,00',
-    type: 'debit',
-    category: 'Moradia',
-    date: '10 Abr, 2025',
-  },
-  {
-    id: 3,
-    name: 'Supermercado',
-    amount: 'R$ 450,00',
-    type: 'debit',
-    category: 'Alimentação',
-    date: '09 Abr, 2025',
-  },
-];
+interface Transaction {
+  id: number;
+  user_id: number;
+  description: string;
+  amount: number;
+  currency: string;
+  exchange_rate: number;
+  transaction_type: 'income' | 'expense';
+  transaction_date: Date;
+  created_at: Date | null;
+  updated_at: Date | null;
+  users: {
+    id: number;
+    name: string;
+    email: string;
+    created_at: Date | null;
+    updated_at: Date | null;
+  };
+};
+
+async function fetchDashboardData() {
+  const response = await fetch('/api/dashboard');
+  if (!response.ok) {
+    throw new Error('Failed to fetch dashboard data');
+  }
+  return response.json();
+}
 
 export default function Dashboard() {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
+  const [stats, setStats] = useState<Stat[]>([]);
+  const [recentTransactionsList, setRecentTransactionsList] = useState<Transaction[]>([]);
+  
+  useEffect(() => {
+    if (status === 'unauthenticated') {
+      redirect('/');
+    }
+  }, [status]);
+
+  if (status === 'loading') {
+    return <div>Loading...</div>;
+  }
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const { stats, recentTransactionsList } = await fetchDashboardData();
+      setStats(stats);
+      setRecentTransactionsList(recentTransactionsList);
+    };
+    fetchData();
+  }, []);
 
   return (
     <div className="space-y-6">
       {/* Welcome section */}
       <div className="bg-white shadow-sm rounded-lg p-6">
         <h2 className="text-2xl font-bold text-gray-900">
-          Olá, {session?.user?.name}!
+          Hello, {session?.user?.name}!
         </h2>
         <p className="mt-1 text-sm text-gray-500">
-          Aqui está um resumo das suas finanças
+          Here is a summary of your finances
         </p>
       </div>
 
       {/* Stats grid */}
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-        {stats.map((stat) => {
-          const Icon = stat.icon;
+        {stats.map((stat: { icon: string; name: string; value: string; }, index: number) => {
+          let Icon;
+          switch (stat.icon) {
+            case 'BanknotesIcon':
+              Icon = BanknotesIcon;
+              break;
+            case 'ArrowTrendingUpIcon':
+              Icon = ArrowTrendingUpIcon;
+              break;
+            case 'ArrowTrendingDownIcon':
+              Icon = ArrowTrendingDownIcon;
+              break;
+            default:
+              Icon = BanknotesIcon;
+          }
           return (
             <div
-              key={stat.name}
+              key={index}
               className="bg-white shadow-sm rounded-lg p-6 hover:shadow-md transition-shadow duration-200"
             >
               <div className="flex items-center">
                 <div className="flex-shrink-0">
-                  <Icon className="h-6 w-6 text-gray-400" />
+                  <Icon className={`h-6 w-6 ${stat.name === 'Total Balance' ? 'text-blue-600' : stat.name === 'Income' ? 'text-green-600' : 'text-gray-400'}`} />
                 </div>
                 <div className="ml-4 flex-1">
-                  <h3 className="text-sm font-medium text-gray-500">
+                  <h3 className={`text-sm font-medium ${stat.name === 'Total Balance' ? 'text-blue-600' : stat.name === 'Income' ? 'text-green-600' : 'text-gray-500'}`} >
                     {stat.name}
                   </h3>
                   <p className="text-xl font-semibold text-gray-900">
                     {stat.value}
-                  </p>
-                  <p className={`text-sm ${stat.changeType === 'positive' ? 'text-green-600' : 'text-red-600'}`}>
-                    {stat.change}
                   </p>
                 </div>
               </div>
@@ -111,19 +121,26 @@ export default function Dashboard() {
         })}
       </div>
 
+      {/* Call to action button */}
+      <div className="mb-6">
+        <a href="/dashboard/statement" className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+          View Complete Statement
+        </a>
+      </div>
+
       {/* Recent transactions */}
       <div className="bg-white shadow-sm rounded-lg">
         <div className="p-6">
           <h3 className="text-lg font-medium text-gray-900">
-            Transações Recentes
+            Recent Transactions
           </h3>
           <p className="mt-1 text-sm text-gray-500">
-            Últimas movimentações na sua conta
+            Latest transactions in your account
           </p>
         </div>
         <div className="border-t border-gray-200">
           <ul role="list">
-            {recentTransactions.map((transaction) => (
+            {recentTransactionsList.map((transaction: Transaction) => (
               <li
                 key={transaction.id}
                 className="relative flex items-center gap-x-4 px-6 py-4 hover:bg-gray-50"
@@ -131,16 +148,21 @@ export default function Dashboard() {
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center justify-between">
                     <p className="text-sm font-medium text-gray-900">
-                      {transaction.name}
+                      {transaction.description}
                     </p>
-                    <p className={`text-sm font-medium ${transaction.type === 'credit' ? 'text-green-600' : 'text-red-600'}`}>
-                      {transaction.type === 'debit' ? '-' : ''}{transaction.amount}
-                    </p>
+                    <div className="flex items-center gap-x-4">
+                      <p className={`text-sm font-medium ${transaction.transaction_type === 'income' ? 'text-green-600' : 'text-red-600'}`}>
+                        {transaction.transaction_type === 'expense' ? '-' : ''}{Number(transaction.amount).toFixed(2)}
+                      </p>
+                      <p className="text-sm font-medium text-blue-600">
+                        R$ {(transaction.amount * transaction.exchange_rate).toFixed(2)}
+                      </p>
+                    </div>
                   </div>
                   <div className="mt-1 flex items-center gap-x-2 text-xs text-gray-500">
-                    <p>{transaction.category}</p>
                     <span className="h-1 w-1 rounded-full bg-gray-300" />
-                    <p>{transaction.date}</p>
+                    <p>{new Date(transaction.transaction_date).toLocaleDateString('pt-BR', { day: 'numeric', month: 'short' })}</p>
+                    <p>{transaction.currency}</p>
                   </div>
                 </div>
               </li>

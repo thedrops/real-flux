@@ -14,6 +14,11 @@
   dependencies:
     regenerator-runtime "^0.14.0"
 
+"@esbuild/linux-x64@0.25.4":
+  version "0.25.4"
+  resolved "https://registry.npmjs.org/@esbuild/linux-x64/-/linux-x64-0.25.4.tgz"
+  integrity sha512-6e0cvXwzOnVWJHq+mskP8DNSrKBr1bULBvnFLpc1KY+d+irZSgZ02TGse5FsafKS5jg2e4pbvK6TPXaF/A6+CA==
+
 "@floating-ui/core@^1.6.0":
   version "1.6.9"
   resolved "https://registry.npmjs.org/@floating-ui/core/-/core-1.6.9.tgz"
@@ -108,6 +113,55 @@
   version "1.2.1"
   resolved "https://registry.npmjs.org/@panva/hkdf/-/hkdf-1.2.1.tgz"
   integrity sha512-6oclG6Y3PiDFcoyk8srjLfVKyMfVCKJ27JwNPViuXziFpmdz+MZnZN/aKY0JGXgYuO/VghU0jcOAZgWXZ1Dmrw==
+
+"@prisma/client@^6.7.0":
+  version "6.7.0"
+  resolved "https://registry.npmjs.org/@prisma/client/-/client-6.7.0.tgz"
+  integrity sha512-+k61zZn1XHjbZul8q6TdQLpuI/cvyfil87zqK2zpreNIXyXtpUv3+H/oM69hcsFcZXaokHJIzPAt5Z8C8eK2QA==
+
+"@prisma/config@6.7.0":
+  version "6.7.0"
+  resolved "https://registry.npmjs.org/@prisma/config/-/config-6.7.0.tgz"
+  integrity sha512-di8QDdvSz7DLUi3OOcCHSwxRNeW7jtGRUD2+Z3SdNE3A+pPiNT8WgUJoUyOwJmUr5t+JA2W15P78C/N+8RXrOA==
+  dependencies:
+    esbuild ">=0.12 <1"
+    esbuild-register "3.6.0"
+
+"@prisma/debug@6.7.0":
+  version "6.7.0"
+  resolved "https://registry.npmjs.org/@prisma/debug/-/debug-6.7.0.tgz"
+  integrity sha512-RabHn9emKoYFsv99RLxvfG2GHzWk2ZI1BuVzqYtmMSIcuGboHY5uFt3Q3boOREM9de6z5s3bQoyKeWnq8Fz22w==
+
+"@prisma/engines-version@6.7.0-36.3cff47a7f5d65c3ea74883f1d736e41d68ce91ed":
+  version "6.7.0-36.3cff47a7f5d65c3ea74883f1d736e41d68ce91ed"
+  resolved "https://registry.npmjs.org/@prisma/engines-version/-/engines-version-6.7.0-36.3cff47a7f5d65c3ea74883f1d736e41d68ce91ed.tgz"
+  integrity sha512-EvpOFEWf1KkJpDsBCrih0kg3HdHuaCnXmMn7XFPObpFTzagK1N0Q0FMnYPsEhvARfANP5Ok11QyoTIRA2hgJTA==
+
+"@prisma/engines@6.7.0":
+  version "6.7.0"
+  resolved "https://registry.npmjs.org/@prisma/engines/-/engines-6.7.0.tgz"
+  integrity sha512-3wDMesnOxPrOsq++e5oKV9LmIiEazFTRFZrlULDQ8fxdub5w4NgRBoxtWbvXmj2nJVCnzuz6eFix3OhIqsZ1jw==
+  dependencies:
+    "@prisma/debug" "6.7.0"
+    "@prisma/engines-version" "6.7.0-36.3cff47a7f5d65c3ea74883f1d736e41d68ce91ed"
+    "@prisma/fetch-engine" "6.7.0"
+    "@prisma/get-platform" "6.7.0"
+
+"@prisma/fetch-engine@6.7.0":
+  version "6.7.0"
+  resolved "https://registry.npmjs.org/@prisma/fetch-engine/-/fetch-engine-6.7.0.tgz"
+  integrity sha512-zLlAGnrkmioPKJR4Yf7NfW3hftcvqeNNEHleMZK9yX7RZSkhmxacAYyfGsCcqRt47jiZ7RKdgE0Wh2fWnm7WsQ==
+  dependencies:
+    "@prisma/debug" "6.7.0"
+    "@prisma/engines-version" "6.7.0-36.3cff47a7f5d65c3ea74883f1d736e41d68ce91ed"
+    "@prisma/get-platform" "6.7.0"
+
+"@prisma/get-platform@6.7.0":
+  version "6.7.0"
+  resolved "https://registry.npmjs.org/@prisma/get-platform/-/get-platform-6.7.0.tgz"
+  integrity sha512-i9IH5lO4fQwnMLvQLYNdgVh9TK3PuWBfQd7QLk/YurnAIg+VeADcZDbmhAi4XBBDD+hDif9hrKyASu0hbjwabw==
+  dependencies:
+    "@prisma/debug" "6.7.0"
 
 "@react-aria/focus@^3.17.1":
   version "3.20.2"
@@ -320,6 +374,13 @@ csstype@^3.0.2:
   resolved "https://registry.npmjs.org/csstype/-/csstype-3.1.3.tgz"
   integrity sha512-M1uQkMl8rQK/szD0LNhtqxIPLpimGm8sOBwU7lLnCpSbTyY3yeU1Vc7l4KT5zT4s/yOxHH5O7tIuuLOCnLADRw==
 
+debug@^4.3.4:
+  version "4.4.0"
+  resolved "https://registry.npmjs.org/debug/-/debug-4.4.0.tgz"
+  integrity sha512-6WTZ/IxCY/T6BALoZHaE4ctp9xm+Z5kY/pzYaCHRFeyVhojxlrm+46y68HA6hr0TcwEssoxNiDEUJQjfPZ/RYA==
+  dependencies:
+    ms "^2.1.3"
+
 detect-libc@^2.0.3:
   version "2.0.3"
   resolved "https://registry.npmjs.org/detect-libc/-/detect-libc-2.0.3.tgz"
@@ -332,6 +393,44 @@ enhanced-resolve@^5.18.1:
   dependencies:
     graceful-fs "^4.2.4"
     tapable "^2.2.0"
+
+esbuild-register@3.6.0:
+  version "3.6.0"
+  resolved "https://registry.npmjs.org/esbuild-register/-/esbuild-register-3.6.0.tgz"
+  integrity sha512-H2/S7Pm8a9CL1uhp9OvjwrBh5Pvx0H8qVOxNu8Wed9Y7qv56MPtq+GGM8RJpq6glYJn9Wspr8uw7l55uyinNeg==
+  dependencies:
+    debug "^4.3.4"
+
+"esbuild@>=0.12 <1":
+  version "0.25.4"
+  resolved "https://registry.npmjs.org/esbuild/-/esbuild-0.25.4.tgz"
+  integrity sha512-8pgjLUcUjcgDg+2Q4NYXnPbo/vncAY4UmyaCm0jZevERqCHZIaWwdJHkf8XQtu4AxSKCdvrUbT0XUr1IdZzI8Q==
+  optionalDependencies:
+    "@esbuild/aix-ppc64" "0.25.4"
+    "@esbuild/android-arm" "0.25.4"
+    "@esbuild/android-arm64" "0.25.4"
+    "@esbuild/android-x64" "0.25.4"
+    "@esbuild/darwin-arm64" "0.25.4"
+    "@esbuild/darwin-x64" "0.25.4"
+    "@esbuild/freebsd-arm64" "0.25.4"
+    "@esbuild/freebsd-x64" "0.25.4"
+    "@esbuild/linux-arm" "0.25.4"
+    "@esbuild/linux-arm64" "0.25.4"
+    "@esbuild/linux-ia32" "0.25.4"
+    "@esbuild/linux-loong64" "0.25.4"
+    "@esbuild/linux-mips64el" "0.25.4"
+    "@esbuild/linux-ppc64" "0.25.4"
+    "@esbuild/linux-riscv64" "0.25.4"
+    "@esbuild/linux-s390x" "0.25.4"
+    "@esbuild/linux-x64" "0.25.4"
+    "@esbuild/netbsd-arm64" "0.25.4"
+    "@esbuild/netbsd-x64" "0.25.4"
+    "@esbuild/openbsd-arm64" "0.25.4"
+    "@esbuild/openbsd-x64" "0.25.4"
+    "@esbuild/sunos-x64" "0.25.4"
+    "@esbuild/win32-arm64" "0.25.4"
+    "@esbuild/win32-ia32" "0.25.4"
+    "@esbuild/win32-x64" "0.25.4"
 
 graceful-fs@^4.2.4:
   version "4.2.11"
@@ -387,6 +486,11 @@ lru-cache@^6.0.0:
   integrity sha512-Jo6dJ04CmSjuznwJSS3pUeWmd/H0ffTlkXXgwZi+eq1UCmqQwCh+eLsYOYCwY991i2Fah4h1BEMCx4qThGbsiA==
   dependencies:
     yallist "^4.0.0"
+
+ms@^2.1.3:
+  version "2.1.3"
+  resolved "https://registry.npmjs.org/ms/-/ms-2.1.3.tgz"
+  integrity sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA==
 
 nanoid@^3.3.6, nanoid@^3.3.8:
   version "3.3.11"
@@ -496,6 +600,16 @@ pretty-format@^3.8.0:
   resolved "https://registry.npmjs.org/pretty-format/-/pretty-format-3.8.0.tgz"
   integrity sha512-WuxUnVtlWL1OfZFQFuqvnvs6MiAGk9UNsBostyBOB0Is9wb5uRESevA6rnl/rkksXaGX3GzZhPup5d6Vp1nFew==
 
+prisma@*, prisma@^6.7.0:
+  version "6.7.0"
+  resolved "https://registry.npmjs.org/prisma/-/prisma-6.7.0.tgz"
+  integrity sha512-vArg+4UqnQ13CVhc2WUosemwh6hr6cr6FY2uzDvCIFwH8pu8BXVv38PktoMLVjtX7sbYThxbnZF5YiR8sN2clw==
+  dependencies:
+    "@prisma/config" "6.7.0"
+    "@prisma/engines" "6.7.0"
+  optionalDependencies:
+    fsevents "2.3.3"
+
 "react-dom@^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0", "react-dom@^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1", "react-dom@^17.0.2 || ^18 || ^19", "react-dom@^18 || ^19 || ^19.0.0-rc", "react-dom@^18.2.0 || 19.0.0-rc-de68d2f4-20241204 || ^19.0.0", react-dom@^19.0.0, react-dom@>=16.8.0:
   version "19.1.0"
   resolved "https://registry.npmjs.org/react-dom/-/react-dom-19.1.0.tgz"
@@ -596,7 +710,7 @@ tslib@^2.8.0:
   resolved "https://registry.npmjs.org/tslib/-/tslib-2.8.1.tgz"
   integrity sha512-oJFu94HQb+KVduSUQL7wnpmqnfmLsOA/nAh6b6EH0wCEoK0/mPeXU6c3wKDV83MkOuHPRHtSXKKU99IBazS/2w==
 
-typescript@^5:
+typescript@^5, typescript@>=5.1.0:
   version "5.8.3"
   resolved "https://registry.npmjs.org/typescript/-/typescript-5.8.3.tgz"
   integrity sha512-p1diW6TqL9L07nNxvRMM7hMMw4c5XOo/1ibL4aAIGmSAt9slTE1Xgw5KWuof2uTOvCg9BY7ZRi+GaF+7sfgPeQ==

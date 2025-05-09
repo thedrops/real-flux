@@ -1,18 +1,14 @@
 import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
+import { User } from 'next-auth';
 
-interface SignInResponse {
-  id: number;
+interface AuthUser extends User {
+  id: string;
   email: string;
-  accessToken: string;
-}
-
-interface ProfileResponse {
-  id: number;
   name: string;
-  email: string;
-  created_at: string;
-  updated_at: string;
+  accessToken: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 const options = {
@@ -25,14 +21,10 @@ const options = {
       },
       async authorize(credentials: Record<string, unknown> | undefined) {
         if (!credentials?.email || !credentials?.password) {
-          console.log('Credenciais ausentes');
           throw new Error('Email e senha são obrigatórios');
         }
 
         try {
-          console.log('Tentando login com:', credentials.email);
-          console.log('API URL:', process.env.API_URL);
-          console.log(`${process.env.API_URL || 'http://localhost:3333'}/auth/signin`)
           const signInResponse = await fetch(`${process.env.API_URL || 'http://localhost:3333'}/auth/signin`, {
             method: 'POST',
             headers: { 
@@ -45,16 +37,12 @@ const options = {
             }),
           });
 
-          console.log('Status do signin:', signInResponse.status);
-          
           if (!signInResponse.ok) {
             const errorData = await signInResponse.text();
-            console.error('Erro no signin:', errorData);
             throw new Error(errorData || 'Falha na autenticação');
           }
 
-          const signInData: SignInResponse = await signInResponse.json();
-          console.log('Login bem-sucedido, token obtido');
+          const signInData = await signInResponse.json();
 
           const profileResponse = await fetch(`${process.env.API_URL || 'http://localhost:3333'}/users/profile`, {
             headers: {
@@ -63,25 +51,23 @@ const options = {
             },
           });
 
-          console.log('Status do profile:', profileResponse.status);
-
           if (!profileResponse.ok) {
             const errorData = await profileResponse.text();
-            console.error('Erro ao buscar perfil:', errorData);
             throw new Error(errorData || 'Falha ao buscar perfil');
           }
 
-          const profileData: ProfileResponse = await profileResponse.json();
-          console.log('Perfil obtido com sucesso');
+          const profileData = await profileResponse.json();
 
           return {
             id: String(profileData.id),
             email: profileData.email,
             name: profileData.name,
             accessToken: signInData.accessToken,
+            createdAt: profileData.created_at,
+            updatedAt: profileData.updated_at,
             created_at: profileData.created_at,
             updated_at: profileData.updated_at
-          };
+          } as AuthUser;
         } catch (error) {
           console.error('Erro detalhado na autenticação:', error);
           throw error;
@@ -91,28 +77,24 @@ const options = {
   ],
   callbacks: {
     async jwt({ token, user }: { token: any; user: any }) {
-      console.log('Token JWT:', token);
-      console.log('User:', user);
       if (user) {
-        token.id = String(user.id);
+        token.id = user.id;
         token.email = user.email;
         token.name = user.name;
         token.accessToken = user.accessToken;
-        token.created_at = user.created_at;
-        token.updated_at = user.updated_at;
+        token.createdAt = user.createdAt;
+        token.updatedAt = user.updatedAt;
       }
       return token;
     },
     async session({ session, token }: { session: any; token: any }) {
-      console.log('Session:', session);
-      console.log('Token:', token);
       if (session.user) {
-        session.user.id = String(token.id);
+        session.user.id = token.id;
         session.user.email = token.email;
         session.user.name = token.name;
         session.user.accessToken = token.accessToken;
-        session.user.created_at = token.created_at;
-        session.user.updated_at = token.updated_at;
+        session.user.createdAt = token.createdAt;
+        session.user.updatedAt = token.updatedAt;
       }
       return session;
     }
