@@ -1,8 +1,10 @@
 'use client';
 import { useSession } from 'next-auth/react';
-import { BanknotesIcon, ArrowTrendingUpIcon, ArrowTrendingDownIcon } from '@heroicons/react/24/outline';
+import { BanknotesIcon, ArrowTrendingUpIcon, ArrowTrendingDownIcon, PlusIcon } from '@heroicons/react/24/outline';
 import { redirect } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import TransactionForm from '@/components/TransactionForm';
+
 
 // Type for transactions
 export interface Stat {
@@ -47,6 +49,7 @@ async function fetchStatementData(page: number = 1, limit: number = 10) {
 
 export default function Statement() {
   const { data: session, status } = useSession();
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [stats, setStats] = useState<Stat[]>([]);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [pagination, setPagination] = useState<Pagination>({
@@ -102,12 +105,23 @@ export default function Statement() {
     <div className="space-y-6">
       {/* Welcome section */}
       <div className="bg-white shadow-sm rounded-lg p-6">
-        <h2 className="text-2xl font-bold text-gray-900">
-          Hello, {session?.user?.name}!
-        </h2>
-        <p className="mt-1 text-sm text-gray-500">
-          Here is your complete transaction statement
-        </p>
+        <div className="flex justify-between items-center">
+          <div>
+            <h2 className="text-2xl font-bold text-gray-900">
+              Hello, {session?.user?.name}!
+            </h2>
+            <p className="mt-1 text-sm text-gray-500">
+              Here is your complete transaction statement
+            </p>
+          </div>
+          <button
+            onClick={() => setIsModalOpen(true)}
+            className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:cursor-pointer hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200"
+          >
+            <PlusIcon className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
+            New Transaction
+          </button>
+        </div>
       </div>
 
       {/* Stats grid */}
@@ -250,6 +264,16 @@ export default function Statement() {
           </div>
         )}
       </div>
+      
+      {/* Transaction Form Modal */}
+      <TransactionForm 
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onTransactionCreated={() => {
+          // Refresh the transactions list after creating a new one
+          fetchData(pagination.currentPage);
+        }}
+      />
     </div>
   );
 }

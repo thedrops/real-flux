@@ -19,8 +19,8 @@ import Loader from '@/components/Loader';
 
 const menuItems = [
   { name: 'Dashboard', href: '/dashboard', icon: HomeIcon },
-  { name: 'Transações', href: '/dashboard/statement', icon: CurrencyDollarIcon },
-  { name: 'Relatórios', href: '/dashboard/reports', icon: ChartBarIcon },
+  { name: 'Transactions', href: '/dashboard/statement', icon: CurrencyDollarIcon },
+  { name: 'Reports', href: '/dashboard/reports', icon: ChartBarIcon },
 ];
 
 function DashboardContent({

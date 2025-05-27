@@ -1,6 +1,8 @@
 import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { User } from 'next-auth';
+import { NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
 
 interface AuthUser extends User {
   id: string;
@@ -11,7 +13,7 @@ interface AuthUser extends User {
   updatedAt: string;
 }
 
-const options = {
+export const options = {
   providers: [
     CredentialsProvider({
       name: 'Credentials',
@@ -110,5 +112,16 @@ const options = {
   secret: process.env.NEXTAUTH_SECRET
 };
 
+// Create a simple handler for NextAuth
 const handler = NextAuth(options);
-export { handler as GET, handler as POST };
+
+// Export the handlers with uppercase method names
+export {
+  handler as GET,
+  handler as POST,
+  handler as OPTIONS,
+  handler as HEAD,
+  handler as PATCH,
+  handler as DELETE,
+  handler as PUT
+};
